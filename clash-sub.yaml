@@ -14,8 +14,8 @@ proxies:
     alterId: 0
     cipher: auto
     udp: false
-    tls: false
-    network: ws
+    tls: true
+    network: tcp
     ws-opts:
       path: /
       headers:
@@ -54,4 +54,5 @@ rules:
   - GEOIP,CN,DIRECT
 
   # 其余走代理
+
   - MATCH,🚀 手动选择
