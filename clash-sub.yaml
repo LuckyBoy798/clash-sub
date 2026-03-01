@@ -1,0 +1,57 @@
+port: 7890
+socks-port: 7891
+allow-lan: true
+mode: rule
+log-level: info
+ipv6: true
+
+proxies:
+  - name: HK-01
+    type: vmess
+    server: 47.243.174.87
+    port: 10086
+    uuid: 71cb59da-2695-410f-be20-4df823aaf171
+    alterId: 0
+    cipher: auto
+    udp: false
+    tls: false
+    network: ws
+    ws-opts:
+      path: /
+      headers:
+        Host: www.zijianhua.top
+
+proxy-groups:
+
+  - name: 🚀 手动选择
+    type: select
+    proxies:
+      - 🔥 自动选择
+      - 🛑 故障转移
+      - HK-01
+      - DIRECT
+
+  - name: 🔥 自动选择
+    type: url-test
+    proxies:
+      - HK-01
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+
+  - name: 🛑 故障转移
+    type: fallback
+    proxies:
+      - HK-01
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+
+rules:
+
+  # 广告拦截
+  - DOMAIN-SUFFIX,ad.com,REJECT
+
+  # 国内直连
+  - GEOIP,CN,DIRECT
+
+  # 其余走代理
+  - MATCH,🚀 手动选择
